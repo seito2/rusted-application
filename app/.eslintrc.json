@@ -42,7 +42,13 @@
         "allow": ["warn", "error"]
       }
     ],
-    "import-access/jsdoc": ["error"],
+    "import-access/jsdoc": [
+      "error",
+      {
+        "indexLoophole": true,
+        "filenameLoophole": false
+      }
+    ],
     "import/order": [2, { "alphabetize": { "order": "asc" } }]
   }
 }
