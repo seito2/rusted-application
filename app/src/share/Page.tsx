@@ -4,6 +4,7 @@ import { Header } from "./Header";
 import "./page.css";
 
 interface PageProps {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   user?: {};
   onLogin: () => void;
   onLogout: () => void;
@@ -17,10 +18,10 @@ export const Page = ({ user, onLogin, onLogout, onCreateAccount }: PageProps) =>
     <section>
       <h2>Pages in Storybook</h2>
       <p>
-        We recommend building UIs with a{" "}
+        We recommend building UIs with a&quot;
         <a href="https://componentdriven.org" target="_blank" rel="noopener noreferrer">
           <strong>component-driven</strong>
-        </a>{" "}
+        </a>
         process starting with atomic components and ending with pages.
       </p>
       <p>
@@ -31,7 +32,7 @@ export const Page = ({ user, onLogin, onLogout, onCreateAccount }: PageProps) =>
       <ul>
         <li>
           Use a higher-level connected component. Storybook helps you compose such data from the
-          "args" of child component stories
+          args of child component stories
         </li>
         <li>
           Assemble data in the page component from your services. You can mock these services out
