@@ -1,26 +1,35 @@
-use actix_web::{get, web, App, HttpServer, Responder};
-use dotenv::dotenv;
+#[macro_use]
+extern crate diesel;
 
-mod config;
+use actix_cors::Cors;
+use actix_web::{http, web, App, HttpServer};
 
-#[get("/{id}/{name}")]
-async fn test(web::Path((id, name)): web::Path<(u32, String)>) -> impl Responder {
-    format!("Hello {}! id:{}", name, id)
-}
-
-#[get("/")]
-async fn index() -> impl Responder {
-    format!("Hello World!")
-}
+mod entity;
+mod handler;
+pub mod models;
+mod modules;
+pub mod schema;
+mod util;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    dotenv().ok();
-
-    let config = crate::config::Config::load_env().unwrap();
-
-    HttpServer::new(|| App::new().service(index))
-        .bind(config.server_address.clone())?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new()
+            .wrap(
+                Cors::default() // <- Construct CORS middleware builder
+                    .allowed_origin("http://localhost:3000")
+                    .allowed_methods(vec!["GET", "POST"])
+                    .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+                    .allowed_header(http::header::CONTENT_TYPE)
+                    .max_age(3600),
+            )
+            .route("/ping", web::post().to(handler::other::ping))
+            .route(
+                "/account/sign-up",
+                web::post().to(handler::account::sign_up),
+            )
+    })
+    .bind(("0.0.0.0", 8080))?
+    .run()
+    .await
 }
